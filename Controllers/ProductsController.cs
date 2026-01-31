@@ -36,8 +36,43 @@ namespace apiEcommerce.Controllers
         }
 
         [Authorize]
+        [HttpGet("Paged", Name = "GetProductInPage")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetProductInPage([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
+        {
+            if (pageNumber < 1 || pageSize < 1)
+            {
+                ModelState.AddModelError("CustomError", "Pagination info are invalid");
+                return BadRequest(ModelState);
+            }
+            var totalProducts = _productRepository.GetTotalProducts();
+            var totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+            if (pageNumber > totalPages)
+            {
+                return NotFound("There's not more pages available");
+            }
+
+            var products = _productRepository.GetProductsInPages(pageNumber, pageSize);
+            var productsDto = _mapper.Map<List<ProductDto>>(products);
+            var paginationResponse = new
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalPages = totalPages,
+                data = productsDto,
+            };
+            return Ok(paginationResponse);
+        }
+
+        [Authorize]
         [HttpGet("{productId:int}", Name = "GetProduct")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetProduct(int productId)
@@ -51,7 +86,6 @@ namespace apiEcommerce.Controllers
             var productDto = _mapper.Map<ProductDto>(product);
             return Ok(productDto);
         }
-
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
