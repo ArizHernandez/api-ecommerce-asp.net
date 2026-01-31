@@ -1,0 +1,39 @@
+{
+  "Version": 1,
+  "Hash": "HXC5iESU74tu91n8Cx5juYkefdZD5tyc6H+sg1yPzWY=",
+  "Source": "apiEcommerce",
+  "BasePath": "_content/apiEcommerce",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "apiEcommerce\\wwwroot",
+      "Source": "apiEcommerce",
+      "ContentRoot": "D:\\Courses\\ASP.net\\apiEcommerce\\wwwroot\\",
+      "BasePath": "_content/apiEcommerce",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\Courses\\ASP.net\\apiEcommerce\\wwwroot\\products-images\\0c86e7b82-4d95-4659-a434-49f52441cef6.jpg",
+      "SourceId": "apiEcommerce",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Courses\\ASP.net\\apiEcommerce\\wwwroot\\",
+      "BasePath": "_content/apiEcommerce",
+      "RelativePath": "products-images/0c86e7b82-4d95-4659-a434-49f52441cef6.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\products-images\\0c86e7b82-4d95-4659-a434-49f52441cef6.jpg"
+    }
+  ]
+}
