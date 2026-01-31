@@ -6,7 +6,7 @@ using apiEcommerce.Data;
 using apiEcommerce.Models;
 using apiEcommerce.Models.Dtos;
 using apiEcommerce.Reporsitory.IRepository;
-using AutoMapper;
+using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -18,17 +18,15 @@ public class UserRepository : IUserRepository
   private readonly ApplicationDBContext _db;
   private readonly UserManager<ApplicationUser> _userManager;
   private readonly RoleManager<IdentityRole> _roleManager;
-  private readonly IMapper _mapper;
   private string? secretKey;
 
   public UserRepository(ApplicationDBContext db, IConfiguration configuration,
-                        UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IMapper mapper)
+                        UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
   {
     _db = db;
     secretKey = configuration.GetValue<string>("ApiSettings:SecretJWT");
     _userManager = userManager;
     _roleManager = roleManager;
-    _mapper = mapper;
   }
 
   public bool ChangeUserPassword(User user)
@@ -127,7 +125,7 @@ public class UserRepository : IUserRepository
     return new UserLoginResponseDto
     {
       Token = handlerToken.WriteToken(token),
-      User = _mapper.Map<UserDataDto>(user),
+      User = user.Adapt<UserDataDto>(),
       Message = "User logged succesfully!"
     };
   }
@@ -183,7 +181,7 @@ public class UserRepository : IUserRepository
 
     await _userManager.AddToRoleAsync(user, userRole);
     var createdUser = _db.ApplicationUsers.FirstOrDefault(u => u.UserName == createUserDto.UserName);
-    return _mapper.Map<UserDataDto>(createdUser);
+    return createdUser.Adapt<UserDataDto>();
   }
 
   public bool UpdateUser(User user)

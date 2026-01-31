@@ -2,7 +2,7 @@ using apiEcommerce.Constants;
 using apiEcommerce.Models.Dtos;
 using apiEcommerce.Reporsitory.IRepository;
 using Asp.Versioning;
-using AutoMapper;
+using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +17,10 @@ namespace apiEcommerce.Controllers
   public class UserController : ControllerBase
   {
     private readonly IUserRepository _userRepository;
-    private readonly IMapper _mapper;
 
-    public UserController(IUserRepository userRepository, IMapper mapper)
+    public UserController(IUserRepository userRepository)
     {
       _userRepository = userRepository;
-      _mapper = mapper;
     }
 
     [HttpGet(Name = "GetUsers")]
@@ -30,7 +28,7 @@ namespace apiEcommerce.Controllers
     public IActionResult GetUsers()
     {
       var users = _userRepository.GetUsers();
-      var usersDto = _mapper.Map<List<UserDto>>(users);
+      var usersDto = users.Adapt<List<UserDto>>();
 
       return Ok(usersDto);
     }
@@ -47,7 +45,7 @@ namespace apiEcommerce.Controllers
         return NotFound(ModelState);
       }
 
-      var userDto = _mapper.Map<UserDto>(user);
+      var userDto = user.Adapt<UserDto>();
       return Ok(userDto);
     }
 

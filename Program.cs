@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Mapster;
+using apiEcommerce.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 var dbConnectionString = builder.Configuration.GetConnectionString("ConnectionUrl");
@@ -19,10 +21,14 @@ if (string.IsNullOrEmpty(secretKey))
 {
   throw new InvalidOperationException("Secret key isn't configurated");
 }
-
 // Add services to the container.
-//? -- Models mapper --
-builder.Services.AddAutoMapper((cfg) => { cfg.AddMaps(typeof(Program).Assembly); });
+// Add services to the container.
+//? -- Models mapper (Mapster) --
+var typeAdapterConfig = new TypeAdapterConfig();
+CategoryProfile.Register(typeAdapterConfig);
+ProductProfile.Register(typeAdapterConfig);
+UserProfile.Register(typeAdapterConfig);
+builder.Services.AddSingleton(typeAdapterConfig);
 //? -- Auth with Identity --
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDBContext>()

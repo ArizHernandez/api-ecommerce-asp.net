@@ -1,22 +1,22 @@
-using System;
+
 using apiEcommerce.Models;
 using apiEcommerce.Models.Dtos;
-using AutoMapper;
+using Mapster;
 
 namespace apiEcommerce.Mapping;
 
-public class UserProfile : Profile
+public static class UserProfile
 {
-  public UserProfile()
-  {
-    CreateMap<User, UserDto>().ReverseMap();
-    CreateMap<UserDto, ApplicationUser>().ReverseMap();
-    CreateMap<ApplicationUser, UserDataDto>().ReverseMap();
-    CreateMap<User, CreateUserDto>().ReverseMap();
-    CreateMap<User, UserRegisterDto>().ReverseMap();
-    CreateMap<User, UserLoginDto>().ReverseMap();
-    CreateMap<User, UserLoginResponseDto>().ReverseMap();
-    CreateMap<User, UserUpdateDto>().ReverseMap();
-    CreateMap<User, UserChangePasswordDto>().ReverseMap();
-  }
+    public static void Register(TypeAdapterConfig config)
+    {
+        config.NewConfig<User, UserDto>().TwoWays();
+        config.NewConfig<UserDto, ApplicationUser>().TwoWays();
+        config.NewConfig<ApplicationUser, UserDataDto>().TwoWays();
+        config.NewConfig<User, CreateUserDto>().TwoWays();
+        config.NewConfig<User, UserRegisterDto>().TwoWays();
+        config.NewConfig<User, UserLoginDto>().TwoWays();
+        config.NewConfig<User, UserLoginResponseDto>().TwoWays();
+        config.NewConfig<User, UserUpdateDto>().TwoWays();
+        config.NewConfig<User, UserChangePasswordDto>().TwoWays();
+    }
 }

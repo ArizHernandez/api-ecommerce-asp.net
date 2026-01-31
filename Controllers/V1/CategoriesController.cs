@@ -3,7 +3,7 @@ using apiEcommerce.Models;
 using apiEcommerce.Models.Dtos;
 using apiEcommerce.Reporsitory.IRepository;
 using Asp.Versioning;
-using AutoMapper;
+using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -18,12 +18,10 @@ namespace apiEcommerce.Controllers.V1
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepository;
-        private readonly IMapper _mapper;
 
-        public CategoriesController(ICategoryRepository categoryRepository, IMapper mapper)
+        public CategoriesController(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
-            _mapper = mapper;
         }
 
         [AllowAnonymous]
@@ -37,13 +35,7 @@ namespace apiEcommerce.Controllers.V1
         {
             System.Console.WriteLine("Categories load");
             var categories = _categoryRepository.GetCategories();
-            var categoriesDto = new List<CategoryDto>();
-
-            foreach (var category in categories)
-            {
-                categoriesDto.Add(_mapper.Map<CategoryDto>(category));
-            }
-
+            var categoriesDto = categories.Adapt<List<CategoryDto>>();
             return Ok(categoriesDto);
         }
 
@@ -64,7 +56,7 @@ namespace apiEcommerce.Controllers.V1
                 return NotFound($"Category with id \"{id}\" not exist");
             }
 
-            var categoryDto = _mapper.Map<CategoryDto>(category);
+            var categoryDto = category.Adapt<CategoryDto>();
             return Ok(categoryDto);
         }
 
@@ -85,7 +77,7 @@ namespace apiEcommerce.Controllers.V1
                 return Conflict(ModelState);
             }
 
-            var category = _mapper.Map<Category>(createCategoryDto);
+            var category = createCategoryDto.Adapt<Category>();
             if (!_categoryRepository.CreateCategory(category))
             {
                 ModelState.AddModelError("CustomError", $"Something goes wrong creating {category.Name}");
@@ -108,7 +100,7 @@ namespace apiEcommerce.Controllers.V1
             if (!_categoryRepository.CategoryExists(id)) return NotFound();
             if (updateCategoryDto == null) return BadRequest(ModelState);
 
-            var category = _mapper.Map<Category>(updateCategoryDto);
+            var category = updateCategoryDto.Adapt<Category>();
             if (_categoryRepository.CategoryExists(category.Name)) return Conflict($"Category {category.Name} already exist");
 
             category.Id = id;
