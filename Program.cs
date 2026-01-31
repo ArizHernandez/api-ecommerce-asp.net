@@ -7,7 +7,6 @@ using apiEcommerce.Reporsitory.IRepository;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -30,7 +29,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 .AddDefaultTokenProviders();
 
 //? -- DB config --
-builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(dbConnectionString));
+builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(dbConnectionString).UseSeeding(DataSeeder.SeedData));
 //? -- Cache --
 builder.Services.AddResponseCaching(options =>
 {
@@ -176,7 +175,7 @@ if (app.Environment.IsDevelopment())
   });
 }
 
-//? -- Enable files transaction --
+//? -- Enable filesa transaction --
 app.UseStaticFiles();
 
 app.UseHttpsRedirection();

@@ -24,8 +24,8 @@ namespace apiEcommerce.Controllers
             _mapper = mapper;
         }
 
-        [Authorize]
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetProducts()

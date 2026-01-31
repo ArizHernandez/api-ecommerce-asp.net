@@ -179,3 +179,4 @@ D:\Courses\ASP.net\apiEcommerce\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.E
 D:\Courses\ASP.net\apiEcommerce\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
 D:\Courses\ASP.net\apiEcommerce\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll
 D:\Courses\ASP.net\apiEcommerce\bin\Debug\net8.0\apiEcommerce.staticwebassets.runtime.json
+D:\Courses\ASP.net\apiEcommerce\obj\Debug\net8.0\apiEcommerce.sourcelink.json
