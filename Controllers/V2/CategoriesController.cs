@@ -47,6 +47,39 @@ namespace apiEcommerce.Controllers.V2
         }
 
         [AllowAnonymous]
+        [HttpGet("Paginated", Name = "GetCategoriesPaginated")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetCategoriesPaginated([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
+        {
+            if (pageNumber < 0 || pageSize < 0)
+            {
+                ModelState.AddModelError("CustomError", "Pagination info are invalid");
+                return BadRequest(ModelState);
+            }
+
+            var totalCategories = _categoryRepository.GetCategoriesTotal();
+            var totalPages = (int)Math.Ceiling((float)totalCategories / pageSize);
+            if (totalPages < 0)
+            {
+                return NotFound("Theres not more data to find");
+            }
+
+            var categories = _categoryRepository.GetCategoriesPaginated(pageNumber, pageSize);
+            var categoriesDto = _mapper.Map<List<Category>>(categories);
+            return Ok(new PaginationResponse<Category>
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalPages = totalPages,
+                Data = categories,
+            });
+        }
+
+        [AllowAnonymous]
         [HttpGet("{id:int}", Name = "GetCategory")]
         // [ResponseCache(Duration = 10)]
         [ResponseCache(CacheProfileName = CacheProfiles.Defaul10)]

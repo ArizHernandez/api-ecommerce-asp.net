@@ -45,6 +45,19 @@ public class CategoryRepository : ICategoryRepository
     return _db.Categories.FirstOrDefault(c => c.Id == id);
   }
 
+  public ICollection<Category> GetCategoriesPaginated(int pageNumber, int pageSize)
+  {
+    return _db.Categories.OrderBy(c => c.Id)
+      .Skip((pageNumber - 1) * pageSize)
+      .Take(pageSize)
+      .ToList();
+  }
+
+  public int GetCategoriesTotal()
+  {
+    return _db.Categories.Count();
+  }
+
   public bool Save()
   {
     return _db.SaveChanges() >= 0;
